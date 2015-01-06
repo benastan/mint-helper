@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        font-family: Helvetica Neue;
+        font-size: 16px;
+      }
+
+      th, td {
+        padding: 5px;
+      }
+
+      th {
+        text-align: left;
+        text-transform: uppercase;
+        font-weight: 100;
+      }
+
+      td {
+        font-size: 1em;
+      }
+
+      td.credit {
+        background: #F6FFF0;
+      }
+
+      td.debit {
+        background: #FFF0F0;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <center>
+      <table width="600">
+        <tr>
+          <td>
+            <h1>
+              Hourly Summary
+            </h1>
+
+            <table width="100%">
+              <tr>
+                <th></th>
+                <th>Total Debits</th>
+                <th>Total Credits</th>
+                <th>Net</th>
+              </tr>
+
+              <tr>
+                <td>This Week</td>
+                <td><%= Transaction.for_current_week.total_debits %></td>
+                <td><%= Transaction.for_current_week.total_credits %></td>
+                <td><%= Transaction.for_current_week.net_spending %></td>
+              </tr>
+
+              <tr>
+                <td>This Month</td>
+                <td><%= Transaction.for_current_month.total_debits %></td>
+                <td><%= Transaction.for_current_month.total_credits %></td>
+                <td><%= Transaction.for_current_month.net_spending %></td>
+              </tr>
+            </table>
+
+            <h2>
+              So Far This Week
+            </h2>
+
+            <table width="100%">
+              <tr>
+                <td>Date</td>
+                <td>Description</td>
+                <td>Amount</td>
+              </tr>
+
+              <% Transaction.for_current_week.each do |transaction| %>
+                <tr>
+                  <td class="<%= transaction.transaction_type %>"><%= transaction.date.strftime('%D') %></td>
+                  <td class="<%= transaction.transaction_type %>"><%= transaction.description %></td>
+                  <td class="<%= transaction.transaction_type %>"><%= '$%.2f' % transaction.amount %></td>
+                </tr>
+              <% end %>
+            </table>
+
+            <h2>
+              Other Transactions This Month
+            </h2>
+
+            <table width="100%">
+              <tr>
+                <td>Date</td>
+                <td>Description</td>
+                <td>Amount</td>
+              </tr>
+
+              <% Transaction.for_current_month_without_current_week.each do |transaction| %>
+                <tr>
+                  <td class="<%= transaction.transaction_type %>"><%= transaction.date.strftime('%D') %></td>
+                  <td class="<%= transaction.transaction_type %>"><%= transaction.description %></td>
+                  <td class="<%= transaction.transaction_type %>"><%= '$%.2f' % transaction.amount %></td>
+                </tr>
+              <% end %>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </center>
+  </body>
+</html>
