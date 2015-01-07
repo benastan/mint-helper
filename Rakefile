@@ -2,9 +2,13 @@ require "bundler/gem_tasks"
 require 'mint/helper'
 
 desc 'Scrape your mint account'
-task :scrape do
-  Mint::Helper::Scraper.new.perform
-  print "succeeded"
+task :scrape, :retries do |task, args|
+  args[:tries] ||= 3
+
+  Retriable.retriable(tries: args[:tries]) do  
+    Mint::Helper::Scraper.new.perform
+    print "succeeded"
+  end
 end
 
 desc 'Migrate the database'
@@ -20,8 +24,9 @@ task :import do
 end
 
 desc 'Send notification email'
-task :notify do
-  Mint::Helper::Notifier.new.send
+task :notify, :template do |task, args|
+  Mint::Helper::Notifier.new(args[:template]).send
 end
 
-task default: [:scrape, :migrate, :import, :notify]
+task setup: [ :scrape, :migrate, :import ]
+task default: [ :setup, :notify ]

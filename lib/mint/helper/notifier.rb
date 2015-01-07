@@ -5,6 +5,10 @@ require 'premailer'
 module Mint
   module Helper
     class Notifier
+      def initialize(template = nil)
+        @template = template || 'notification'
+      end
+
       def send
         html = ERB.new(template_data).result(binding)
 
@@ -36,7 +40,7 @@ module Mint
       end
 
       def template_data
-        Pathname('./templates/notification.erb').read
+        Pathname('./templates/%s.erb' % @template).read
       end
     end
   end

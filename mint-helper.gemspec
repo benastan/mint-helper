@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mail"
   spec.add_dependency "premailer"
   spec.add_dependency "activesupport"
+  spec.add_dependency "retriable"
 end
