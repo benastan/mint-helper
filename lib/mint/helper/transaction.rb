@@ -29,6 +29,15 @@ module Mint
         def for_current_month_without_current_week
           where('date >= ? AND date < ?', Time.new.beginning_of_month, Time.new.beginning_of_week)
         end
+
+        def for_day(date)
+          where('date = ?', date)
+        end
+        
+        def not_for_day(date)
+          where('date != ?', date)
+        end
+        
         def uncategorized
           transactions.where(category: 'Uncategorized')
         end

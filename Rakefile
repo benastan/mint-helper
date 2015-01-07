@@ -28,5 +28,13 @@ task :notify, :template do |task, args|
   Mint::Helper::Notifier.new(args[:template]).send
 end
 
+task :preview, :template do |task, args|
+  dirname = Pathname(File.join('.', 'tmp'))
+  filename = dirname.join('preview-%s.html' % Time.new.strftime('%FT%T'))
+  FileUtils.mkdir_p(dirname)
+  Mint::Helper::Notifier.new(args[:template]).write(filename)
+  `open #{filename.expand_path}`
+end
+
 task setup: [ :scrape, :migrate, :import ]
 task default: [ :setup, :notify ]

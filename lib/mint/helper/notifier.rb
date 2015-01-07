@@ -10,12 +10,12 @@ module Mint
       end
 
       def send
-        html = ERB.new(template_data).result(binding)
+        html = render_html
 
         mail = Mail.new do
           to Mint::Email
           from 'no-reply@example.com'
-          subject 'Helloooo'
+          subject 'It\'s %s - Time for your hourly financial checkup' % Time.new.strftime('%D %T')
 
           text_part do
             body 'This is plain text'
@@ -37,6 +37,16 @@ module Mint
         end
 
         mail.deliver!
+      end
+
+      def write(target)
+        file = File.new(target, 'wb+')
+        file.write(render_html)
+        file.close
+      end
+
+      def render_html
+        ERB.new(template_data).result(binding)
       end
 
       def template_data
