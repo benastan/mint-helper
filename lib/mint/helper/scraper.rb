@@ -47,7 +47,9 @@ module Mint
       end
 
       def log(message)
-        print("#{message}\n")
+        now = Time.new - (3600 * 8)
+        pst = Time.new(now.year, now.month, now.day, now.hour, now.min, now.sec, '-08:00')
+        print("%s: %s\n" % [ pst.strftime('%FT%T'), message ])
       end
 
       def wait_for

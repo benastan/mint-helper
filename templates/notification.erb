@@ -61,6 +61,13 @@
               </tr>
 
               <tr>
+                <td>Today</td>
+                <td><%= '%.2f' % Transaction.for_day(Time.new).total_debits %></td>
+                <td><%= '%.2f' % Transaction.for_day(Time.new).total_credits %></td>
+                <td><%= '%.2f' % Transaction.for_day(Time.new).net_spending %></td>
+              </tr>
+
+              <tr>
                 <td>This Week</td>
                 <td><%= '%.2f' % Transaction.for_current_week.total_debits %></td>
                 <td><%= '%.2f' % Transaction.for_current_week.total_credits %></td>
